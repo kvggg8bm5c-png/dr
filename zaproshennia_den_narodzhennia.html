@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запрошення на день народження 🎂</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #30233b;
+      background: radial-gradient(circle at top left, #ffe3ec, transparent 42%),
+                  linear-gradient(135deg, #f8edff, #e5f4ff);
+    }
+    .invite {
+      width: min(100%, 620px);
+      padding: clamp(28px, 6vw, 48px);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(75, 43, 94, .14);
+    }
+    .cake { font-size: 3.5rem; margin-bottom: 10px; }
+    h1 { margin: 0 0 18px; font-size: clamp(1.7rem, 5vw, 2.3rem); }
+    .message { font-size: clamp(1.05rem, 3vw, 1.2rem); line-height: 1.7; }
+    .question { margin: 20px 0 28px; font-weight: 750; font-size: 1.2rem; }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      min-height: 72px;
+    }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 24px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform .22s ease, font-size .22s ease, padding .22s ease, opacity .22s ease;
+      touch-action: manipulation;
+    }
+    #yes {
+      color: white;
+      background: linear-gradient(135deg, #8e44ad, #d63384);
+      box-shadow: 0 8px 20px rgba(183, 55, 143, .25);
+      font-size: 1rem;
+    }
+    #no {
+      color: #4c3d56;
+      background: #eee8f2;
+      font-size: 1rem;
+    }
+    #result {
+      margin-top: 28px;
+      color: #8e2670;
+      font-size: clamp(1.2rem, 4vw, 1.65rem);
+      font-weight: 850;
+      line-height: 1.5;
+    }
+    .hidden { display: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="invite">
+    <div class="cake" aria-hidden="true">🎂🎈</div>
+    <h1>Запрошення на день народження!</h1>
+    <p class="message">Вітаю! Запрошую тебе на мій день народження, який відбудеться у суботу 24.10, час і місце з безпекових міркувань буде повідомлено пізніше)</p>
+    <p class="question">То що, зможеш?</p>
+
+    <div class="buttons" id="buttons">
+      <button id="yes" type="button">Зможу! 🎉</button>
+      <button id="no" type="button">Не зможу 😅</button>
+    </div>
+    <div id="result" class="hidden" role="status" aria-live="polite">ЧУДОВО! БУДУ З НЕТЕРПІННЯМ ЧЕКАТИ! 🎉🥳</div>
+  </main>
+
+  <script>
+    const yesButton = document.getElementById('yes');
+    const noButton = document.getElementById('no');
+    const result = document.getElementById('result');
+    let noClicks = 0;
+    const maxClicks = 20;
+
+    noButton.addEventListener('click', () => {
+      if (noClicks >= maxClicks) return;
+      noClicks++;
+
+      // З кожним натисканням «Не зможу» зменшується, а «Зможу!» росте.
+      const progress = noClicks / maxClicks;
+      yesButton.style.fontSize = `${1 + progress * 1.1}rem`;
+      yesButton.style.padding = `${14 + progress * 10}px ${24 + progress * 18}px`;
+      noButton.style.fontSize = `${Math.max(0.2, 1 - progress * 0.8)}rem`;
+      noButton.style.padding = `${Math.max(2, 14 - progress * 11)}px ${Math.max(3, 24 - progress * 19)}px`;
+      noButton.style.opacity = String(1 - progress * 0.65);
+
+      if (noClicks === maxClicks) {
+        noButton.classList.add('hidden');
+        yesButton.textContent = 'Зможу! 🎉';
+      }
+    });
+
+    yesButton.addEventListener('click', () => {
+      document.getElementById('buttons').classList.add('hidden');
+      result.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
